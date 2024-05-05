@@ -1,5 +1,12 @@
+
+--if u get angry from these give me a way to fix dungeon loading too fast
+repeat task.wait() until workspace.dungeon
+repeat task.wait() until game.Players
+repeat task.wait() until game.Players.LocalPlayer
+repeat task.wait() until game.Players.LocalPlayer.Character
+repeat task.wait() until game.Players.LocalPlayer.Character.Humanoid
+
 local LocalPlayer = game.Players.LocalPlayer
-local HumanModCons = {}
 local alreadySent = false
 local Gregg = nil
 local MoveToPath  = {
@@ -26,6 +33,7 @@ local function SendWebhook(msg)
     local data, url
     task.spawn(function()
         url = getgenv().webHook
+        if not url then return end
         data = {
             ["embeds"] = {
                 {
@@ -114,6 +122,7 @@ end)
 
 workspace.dungeon.DescendantRemoving:Connect(function(descendant)
     if descendant.Name == "Gregg" then
+        task.wait(1)
         LocalPlayer.Character.Humanoid.Health = 0
     end
 end)
@@ -132,6 +141,8 @@ workspace.ChildAdded:Connect(function(child)
     end
 end)
 
+castAll()
+
 for i,Path in pairs(MoveToPath) do
     if Gregg then
         return
@@ -143,9 +154,8 @@ for i,Path in pairs(MoveToPath) do
         balls = false
     end)
 
-    while balls do
-        castAll()
+    while balls and not Gregg do
         LocalPlayer.Character.Humanoid:MoveTo(Path)
-        LocalPlayer.Character.Humanoid.MoveToFinished:Wait()
+        task.wait()
     end
 end

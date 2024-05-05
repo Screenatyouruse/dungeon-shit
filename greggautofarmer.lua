@@ -61,6 +61,7 @@ local function castAll()
         for _,spell in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
             if spell.cooldown.Value <= 0.1 then
                 spell.abilityEvent:FireServer()
+                spell.spellEvent:FireServer()
                 task.wait(getgenv().cooldownEachSpell)
             end
         end

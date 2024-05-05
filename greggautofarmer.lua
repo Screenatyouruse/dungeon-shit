@@ -1,10 +1,7 @@
 
 --if u get angry from these give me a way to fix dungeon loading too fast
-repeat task.wait() until workspace.dungeon
 repeat task.wait() until game.Players
 repeat task.wait() until game.Players.LocalPlayer
-repeat task.wait() until game.Players.LocalPlayer.Character
-repeat task.wait() until game.Players.LocalPlayer.Character.Humanoid
 
 local LocalPlayer = game.Players.LocalPlayer
 local alreadySent = false

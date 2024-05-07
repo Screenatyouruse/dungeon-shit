@@ -1,7 +1,8 @@
-
 --if u get angry from these give me a way to fix dungeon loading too fast
 repeat task.wait() until game.Players
 repeat task.wait() until game.Players.LocalPlayer
+repeat task.wait() until game.Players.LocalPlayer.Character
+repeat task.wait() until game.Players.LocalPlayer.Character.Humanoid
 
 local LocalPlayer = game.Players.LocalPlayer
 local alreadySent = false
@@ -25,7 +26,7 @@ local MoveToPath  = {
     Vector3.new(678, 89, -189),
     Vector3.new(699, 89, -78),
 }
-
+print('1')
 local function SendWebhook(msg)
     local data, url
     task.spawn(function()
@@ -59,14 +60,17 @@ end
 local function castAll()
     task.spawn(function()
         for _,spell in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
-            if spell.cooldown.Value <= 0.1 then
-                spell.abilityEvent:FireServer()
-                spell.spellEvent:FireServer()
+            if spell.cooldown.Value then
+                for _,randombullshit in pairs(spell:GetChildren()) do
+                    if randombullshit.Name == "abilityEvent" or randombullshit.Name == "spellEvent" then
+                        randombullshit:FireServer()
+                    end
+                end
                 task.wait(getgenv().cooldownEachSpell)
             end
         end
 
-        task.wait(getgenv().cooldownEachSpell2)
+        task.wait(getgenv().cooldownEachSpell2) --so if u dont include this, it crashes LOL
 
         castAll()
     end)
@@ -95,14 +99,6 @@ end)
 
 
 task.spawn(function()
-    --[[
-    HumanModCons.wsLoop = (HumanModCons.wsLoop and HumanModCons.wsLoop:Disconnect() and false) or LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(WalkSpeedChange)
-    HumanModCons.wsCA = (HumanModCons.wsCA and HumanModCons.wsCA:Disconnect() and false) or LocalPlayer.CharacterAdded:Connect(function(nChar)
-        LocalPlayer.Character, LocalPlayer.Character.Humanoid = nChar, nChar:WaitForChild("Humanoid")
-        WalkSpeedChange()
-        HumanModCons.wsLoop = (HumanModCons.wsLoop and HumanModCons.wsLoop:Disconnect() and false) or LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(WalkSpeedChange)
-    end)
-    ]]
     while true do task.wait()
         WalkSpeedChange()
     end
@@ -118,6 +114,7 @@ workspace.dungeon.DescendantAdded:Connect(function(descendant)
     end
 end)
 
+
 workspace.dungeon.DescendantRemoving:Connect(function(descendant)
     if descendant.Name == "Gregg" then
         task.wait(1)
@@ -128,9 +125,11 @@ end)
 workspace.ChildAdded:Connect(function(child)
     if child.Name == "Coin" then
         LocalPlayer.Character.Humanoid:MoveTo(child.Coin.Position)
+        LocalPlayer.Character.Humanoid.MoveToFinished:Wait()    
+        LocalPlayer.Character.Humanoid:MoveTo(Gregg.LowerTorso.Position)
         LocalPlayer.Character.Humanoid.MoveToFinished:Wait()
-        LocalPlayer.Character.Humanoid:MoveTo(Gregg.UpperTorso.Position)
-        for i=1,100 do
+
+        for i=1,1000 do
             for _,spell in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
                 spell.abilityEvent:FireServer()
             end

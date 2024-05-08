@@ -26,7 +26,7 @@ local MoveToPath  = {
     Vector3.new(678, 89, -189),
     Vector3.new(699, 89, -78),
 }
-print('1')
+
 local function SendWebhook(msg)
     local data, url
     task.spawn(function()
@@ -63,7 +63,11 @@ local function castAll()
             if spell.cooldown.Value then
                 for _,randombullshit in pairs(spell:GetChildren()) do
                     if randombullshit.Name == "abilityEvent" or randombullshit.Name == "spellEvent" then
-                        randombullshit:FireServer()
+                        if getgenv().UseVIM then
+                            game:GetService("VirtualInputManager"):SendKeyEvent(true, string.upper(spell.abilitySlot.Value), false, game)
+                        else
+                            randombullshit:FireServer()
+                        end
                     end
                 end
                 task.wait(getgenv().cooldownEachSpell)
@@ -128,13 +132,8 @@ workspace.ChildAdded:Connect(function(child)
         LocalPlayer.Character.Humanoid.MoveToFinished:Wait()    
         LocalPlayer.Character.Humanoid:MoveTo(Gregg.LowerTorso.Position)
         LocalPlayer.Character.Humanoid.MoveToFinished:Wait()
-
-        for i=1,1000 do
-            for _,spell in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
-                spell.abilityEvent:FireServer()
-            end
-            task.wait(0.1)
-        end
+        getgenv().cooldownEachSpell = 0
+        getgenv().cooldownEachSpell2 = 0 
     end
 end)
 

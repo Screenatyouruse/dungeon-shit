@@ -132,6 +132,7 @@ workspace.ChildAdded:Connect(function(child)
         LocalPlayer.Character.Humanoid.MoveToFinished:Wait()    
         LocalPlayer.Character.Humanoid:MoveTo(Gregg.LowerTorso.Position)
         LocalPlayer.Character.Humanoid.MoveToFinished:Wait()
+        LocalPlayer.Character.HumanoidRootPart.CFrame = Gregg.LowerTorso.CFrame
         getgenv().cooldownEachSpell = 0
         getgenv().cooldownEachSpell2 = 0 
     end
